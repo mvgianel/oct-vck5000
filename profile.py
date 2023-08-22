@@ -1,11 +1,10 @@
-"""Configure FPGA nodes using a post-boot script.
+"""Alveo V-70 host machine setup
 """
 
 # Import the Portal object.
 import geni.portal as portal
 # Import the ProtoGENI library.
-"""fpga 
-"""
+
 
 # Import the Portal object.
 import geni.portal as portal
