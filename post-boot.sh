@@ -6,4 +6,5 @@ wget -cO - "https://raw.githubusercontent.com/Xilinx/Vitis-AI/master/board_setup
 wget -cO - "https://raw.githubusercontent.com/Xilinx/Vitis-AI/master/board_setup/v70/scripts/install_v70_shell.sh" > /local/repository/scripts/install_v70_shell.sh
 wget -cO - "https://raw.githubusercontent.com/Xilinx/Vitis-AI/master/board_setup/v70/install.sh" > /local/repository/install.sh
 apt update
-bash /local/repository/install.sh
+cd /local/repository
+bash ./install.sh
