@@ -23,17 +23,17 @@ HOMEDIR="/users/$USER"
 
 bash -c "cd '$HOMEDIR' || exit; git clone '$REPO_URL'; cd Vitis-AI/board_setup/v70; source install.sh"
 
-usermod -aG docker ${USER}
-newgrp docker
+#usermod -aG docker ${USER}
+#newgrp docker
 
 # Specify the desired data directory
-new_data_path="/docker"
+#new_data_path="/docker"
 
 # Create the daemon.json file with the specified content
-echo '{
-  "data-root": "'"$new_data_path"'"
-}' | sudo tee /etc/docker/daemon.json > /dev/null
+#echo '{
+#  "data-root": "'"$new_data_path"'"
+#}' | sudo tee /etc/docker/daemon.json > /dev/null
 
 # Restart Docker
-sudo systemctl restart docker
-echo "Docker data directory updated to $new_data_path"
+#sudo systemctl restart docker
+#echo "Docker data directory updated to $new_data_path"
