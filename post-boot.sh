@@ -11,3 +11,15 @@ bash -c 'cd /local/repository && git clone https://github.com/OCT-FPGA/Vitis-AI 
 
 mkdir /docker 
 /usr/local/etc/emulab/mkextrafs.pl /docker 
+
+# Specify the desired data directory
+new_data_path="/docker"
+
+# Create the daemon.json file with the specified content
+echo '{
+  "data-root": "'"$new_data_path"'"
+}' | sudo tee /etc/docker/daemon.json > /dev/null
+
+# Restart Docker
+sudo systemctl restart docker
+echo "Docker data directory updated to $new_data_path"
