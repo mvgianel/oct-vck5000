@@ -6,18 +6,18 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu fo
 apt-cache policy docker-ce 
 apt install -y docker-ce 
 
-SCRIPTNAME=$0
+#SCRIPTNAME=$0
 #
-GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
-if [ $? -ne 0 ]; then
-echo "ERROR: could not run geni-get user_urn!"
-exit 1
-fi
-if [ $USER != $GENIUSER ]; then
-sudo -u $GENIUSER $SCRIPTNAME
-exit $?
-fi
-HOMEDIR="/users/$USER"
+#GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
+#if [ $? -ne 0 ]; then
+#echo "ERROR: could not run geni-get user_urn!"
+#exit 1
+#fi
+#if [ $USER != $GENIUSER ]; then
+#sudo -u $GENIUSER $SCRIPTNAME
+#exit $?
+#fi
+#HOMEDIR="/users/$USER"
 
 #bash -c "cd '$HOMEDIR' || exit; git clone '$REPO_URL'; cd Vitis-AI/board_setup/v70; source install.sh"
 
