@@ -7,4 +7,5 @@ apt-cache policy docker-ce
 apt install -y docker-ce 
 usermod -aG docker ${USER}
 
-git clone https://github.com/OCT-FPGA/Vitis-AI
+bash -c 'cd /local/repository && git clone https://github.com/OCT-FPGA/Vitis-AI && cd Vitis-AI/board_setup/v70 && ./install.sh'
+
