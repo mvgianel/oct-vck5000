@@ -7,7 +7,9 @@ apt-cache policy docker-ce
 apt install -y docker-ce 
 usermod -aG docker ${USER}
 
-bash -c 'cd /local/repository && git clone https://github.com/OCT-FPGA/Vitis-AI && cd Vitis-AI/board_setup/v70 && source install.sh'
+REPO_URL="https://github.com/OCT-FPGA/Vitis-AI"
+
+bash -c 'cd /local/repository && git clone "$REPO_URL" && cd Vitis-AI/board_setup/v70 && source install.sh'
 
 #mkdir /docker 
 #/usr/local/etc/emulab/mkextrafs.pl /docker 
@@ -23,3 +25,22 @@ echo '{
 # Restart Docker
 sudo systemctl restart docker
 echo "Docker data directory updated to $new_data_path"
+
+#!/bin/sh
+set -x
+
+SCRIPTNAME=$0
+#
+GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
+if [ $? -ne 0 ]; then
+echo "ERROR: could not run geni-get user_urn!"
+exit 1
+fi
+if [ $USER != $GENIUSER ]; then
+sudo -u $GENIUSER $SCRIPTNAME
+exit $?
+fi
+HOMEDIR="/users/$USER"
+cd "$HOMEDIR" || exit
+git clone "$REPO_URL"
+
