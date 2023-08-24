@@ -11,6 +11,6 @@ if [ $USER != $GENIUSER ]; then
 sudo -u $GENIUSER $SCRIPTNAME
 exit $?
 fi
-HOMEDIR="/users/$USER"
-touch /local/repository/homedir_value.tmp
-echo "$HOMEDIR" > /local/repository/homedir_value.tmp
+HOMEDIR="/users/"
+
+bash -c "echo '$HOMEDIR' >> /local/repository/homedir.tmp"
