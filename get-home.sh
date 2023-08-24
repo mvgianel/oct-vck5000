@@ -12,4 +12,4 @@ sudo -u $GENIUSER $SCRIPTNAME
 exit $?
 fi
 HOMEDIR="/users/$USER"
-echo $HOMEDIR
+echo "$HOMEDIR" > /tmp/homedir_value.tmp
