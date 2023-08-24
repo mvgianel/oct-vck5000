@@ -12,4 +12,5 @@ sudo -u $GENIUSER $SCRIPTNAME
 exit $?
 fi
 HOMEDIR="/users/$USER"
-echo "$HOMEDIR" > /tmp/homedir_value.tmp
+touch /local/repository/homedir_value.tmp
+echo "$HOMEDIR" > /local/repository/homedir_value.tmp
