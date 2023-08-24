@@ -6,7 +6,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu fo
 apt-cache policy docker-ce 
 apt install -y docker-ce 
 
-HOMEDIR=$(./outer_script.sh)
+HOMEDIR=$(./get-home.sh)
 # Now you can use the HOMEDIR variable
 echo "HOMEDIR: $HOMEDIR"
 
