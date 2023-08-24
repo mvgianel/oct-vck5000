@@ -9,3 +9,5 @@ usermod -aG docker ${USER}
 
 bash -c 'cd /local/repository && git clone https://github.com/OCT-FPGA/Vitis-AI && cd Vitis-AI/board_setup/v70 && source install.sh'
 
+mkdir /docker 
+/usr/local/etc/emulab/mkextrafs.pl /docker 
