@@ -6,8 +6,6 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu fo
 apt-cache policy docker-ce 
 apt install -y docker-ce 
 
-set -x
-
 SCRIPTNAME=$0
 #
 GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
@@ -21,7 +19,7 @@ exit $?
 fi
 HOMEDIR="/users/$USER"
 
-bash -c "cd '$HOMEDIR' || exit; git clone '$REPO_URL'; cd Vitis-AI/board_setup/v70; source install.sh"
+#bash -c "cd '$HOMEDIR' || exit; git clone '$REPO_URL'; cd Vitis-AI/board_setup/v70; source install.sh"
 
 #usermod -aG docker ${USER}
 #newgrp docker
