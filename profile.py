@@ -60,7 +60,9 @@ for i in range(params.nodeCount):
     # Assign to the node hosting the FPGA.
     node.hardware_type = "fpga-alveo"
     # Set Storage
-    node.disk = 40
+    #node.disk = 40
+    bs = node.Blockstore("bs", "/docker")
+    bs.size = "30GB"
     node.component_manager_id = "urn:publicid:IDN+cloudlab.umass.edu+authority+cm"
     node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh  >> /local/repository/output_log.txt")) 
     pass
