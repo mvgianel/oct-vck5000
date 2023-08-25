@@ -41,4 +41,5 @@ echo "Docker data directory updated to $new_data_path"
 
 # Download Vitis AI docker image
 echo "Download docker image as $USER"
+echo "Docker image: $DOCKERIMAGE"
 sudo -u $USER docker pull xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest
