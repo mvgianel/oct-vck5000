@@ -13,4 +13,4 @@ exit $?
 fi
 HOMEDIR="/users/"
 touch ~/homedir.tmp
-bash -c "echo '$HOMEDIR' >> /local/repository/homedir.tmp"
+bash -c "echo '$HOMEDIR' >> ~/homedir.tmp"
