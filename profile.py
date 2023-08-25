@@ -65,6 +65,6 @@ for i in range(params.nodeCount):
     bs = node.Blockstore("bs", "/docker")
     bs.size = "30GB"
     node.component_manager_id = "urn:publicid:IDN+cloudlab.umass.edu+authority+cm"
-    node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.dockerImage + " >> /local/repository/output_log.txt"))
+    node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + "tensorflow" + " >> /local/repository/output_log.txt"))
     pass
 pc.printRequestRSpec(request)
