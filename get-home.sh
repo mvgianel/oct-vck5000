@@ -12,5 +12,4 @@ sudo -u $GENIUSER $SCRIPTNAME
 exit $?
 fi
 HOMEDIR="/users/"
-touch ~/homedir.tmp
-bash -c "echo '$HOMEDIR' >> ~/homedir.tmp"
+echo "/users/$USER"
