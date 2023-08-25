@@ -29,6 +29,8 @@ pc.defineParameter("nodeCount", "Number of Nodes", portal.ParameterType.INTEGER,
 imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', 'UBUNTU 20.04'),
              ('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04')] 
 
+dockerImage = ['pytorch', 'tensorflow', 'tensorflow2']
+
 #toolVersion = [('2023.1')]
                    
 #pc.defineParameter("toolVersion", "Tool Version",
@@ -38,7 +40,12 @@ imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', '
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
                    imageList[0], imageList,
-                   longDescription="Supported operating systems are Ubuntu and CentOS.")                    
+                   longDescription="Supported operating systems are Ubuntu and CentOS.")    
+
+pc.defineParameter("osImage", "Docker Image",
+                   portal.ParameterType.STRING,
+                   dockerImage[0], dockerImage,
+                   longDescription="Supported docker images.")  
 
 # Retrieve the values the user specifies during instantiation.
 params = pc.bindParameters()        
@@ -64,6 +71,6 @@ for i in range(params.nodeCount):
     bs = node.Blockstore("bs", "/docker")
     bs.size = "30GB"
     node.component_manager_id = "urn:publicid:IDN+cloudlab.umass.edu+authority+cm"
-    node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh  >> /local/repository/output_log.txt")) 
+    node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.dockerImage + " >> /local/repository/output_log.txt"))
     pass
 pc.printRequestRSpec(request)
