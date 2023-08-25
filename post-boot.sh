@@ -44,8 +44,3 @@ echo "Docker data directory updated to $new_data_path"
 # Download Vitis AI docker image
 DOCKERIMAGE=$(cat /local/repository/dockerimage.txt)
 sudo -u $USER docker pull xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest
-
-# Start docker container
-bash -c "cd Vitis-AI && ./docker_run.sh xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest"
-sudo mkdir /usr/share/vitis_ai_library/models
-
