@@ -7,7 +7,8 @@ apt-cache policy docker-ce
 apt install -y docker-ce 
 
 touch ~/home_dir.tmp
-HOMEDIR=$(./get-home.sh)
+#HOMEDIR=$(./get-home.sh)
+HOMEDIR=$(bash -c './get-home.sh')
 # Now you can use the HOMEDIR variable
 echo "HOMEDIR: $HOMEDIR"
 
