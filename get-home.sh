@@ -12,5 +12,5 @@ sudo -u $GENIUSER $SCRIPTNAME
 exit $?
 fi
 HOMEDIR="/users/"
-
+touch ~/homedir.tmp
 bash -c "echo '$HOMEDIR' >> /local/repository/homedir.tmp"
