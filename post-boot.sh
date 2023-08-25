@@ -1,3 +1,4 @@
+DOCKERIMAGE=$1
 echo "Install docker"
 apt update 
 apt install -y apt-transport-https ca-certificates curl software-properties-common 
@@ -40,4 +41,4 @@ echo "Docker data directory updated to $new_data_path"
 
 # Download Vitis AI docker image
 echo "Download docker image as $USER"
-sudo -u $USER docker pull xilinx/vitis-ai-pytorch-cpu:latest
+sudo -u $USER docker pull xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest
