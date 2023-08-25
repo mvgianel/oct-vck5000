@@ -23,7 +23,7 @@ echo "$HOMEDIR"
 REPO_URL="https://github.com/OCT-FPGA/Vitis-AI"
 bash -c "cd '$HOMEDIR' && git clone '$REPO_URL' && cd Vitis-AI/board_setup/v70; source install.sh"
 
-sudo usermod -aG docker suranga
+sudo usermod -aG docker $USER
 newgrp docker
 
 # Specify the desired data directory
