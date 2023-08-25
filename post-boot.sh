@@ -20,8 +20,8 @@ fi
 echo "Home directory:"
 HOMEDIR="/users/$USER"
 echo "$HOMEDIR"
-
-#bash -c "cd '$HOMEDIR' || exit; git clone '$REPO_URL'; cd Vitis-AI/board_setup/v70; source install.sh"
+REPO_URL="https://github.com/OCT-FPGA/Vitis-AI"
+bash -c "cd '$HOMEDIR' && git clone '$REPO_URL' && cd Vitis-AI/board_setup/v70; source install.sh"
 
 #usermod -aG docker ${USER}
 #newgrp docker
