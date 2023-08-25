@@ -1,6 +1,5 @@
 #!/bin/bash
 DOCKERIMAGE=$1
-echo "Docker image: $DOCKERIMAGE"
 echo "$DOCKERIMAGE" > /local/repository/dockerimage.txt
 echo "Install docker"
 apt update 
@@ -43,7 +42,10 @@ sudo systemctl restart docker
 echo "Docker data directory updated to $new_data_path"
 
 # Download Vitis AI docker image
-echo "Download docker image as $USER"
 DOCKERIMAGE=$(cat /local/repository/dockerimage.txt)
-echo "Docker image2: $DOCKERIMAGE"
 sudo -u $USER docker pull xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest
+
+# Start docker container
+bash -c "cd Vitis-AI && ./docker_run.sh xilinx/vitis-ai-$DOCKERIMAGE-cpu:latest"
+sudo mkdir /usr/share/vitis_ai_library/models
+
