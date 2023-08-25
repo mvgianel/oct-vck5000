@@ -29,7 +29,7 @@ pc.defineParameter("nodeCount", "Number of Nodes", portal.ParameterType.INTEGER,
 imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', 'UBUNTU 20.04'),
              ('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04')] 
 
-dockerImage = ['pytorch', 'tensorflow', 'tensorflow2']
+dockerImageList = ['pytorch', 'tensorflow', 'tensorflow2']
                    
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
@@ -38,7 +38,7 @@ pc.defineParameter("osImage", "Select Image",
 
 pc.defineParameter("dockerImage", "Docker Image",
                    portal.ParameterType.STRING,
-                   dockerImage[0], dockerImage,
+                   dockerImageList[0], dockerImageList,
                    longDescription="Supported docker images.")  
 
 # Retrieve the values the user specifies during instantiation.
