@@ -24,7 +24,7 @@ echo "Home directory:"
 HOMEDIR="/users/$USER"
 echo "$HOMEDIR"
 REPO_URL="https://github.com/OCT-FPGA/Vitis-AI"
-bash -c "cd '$HOMEDIR' && git clone '$REPO_URL' && cd Vitis-AI/board_setup/v70; source install.sh"
+bash -c "cd '$HOMEDIR' && git clone '$REPO_URL' -b 3.0 && cd Vitis-AI/board_setup/vck5000; source install.sh"
 
 sudo usermod -aG docker $USER
 newgrp docker
