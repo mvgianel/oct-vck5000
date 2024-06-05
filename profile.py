@@ -59,7 +59,7 @@ for i in range(params.nodeCount):
     node = request.RawPC(name)
     node.disk_image = params.osImage
     # Assign to the node hosting the FPGA.
-    node.hardware_type = "fpga-alveo"
+    node.hardware_type = "fpga-r740-vck5000"
     # Set Storage
     #node.disk = 40
     bs = node.Blockstore("bs", "/docker")
