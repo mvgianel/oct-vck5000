@@ -72,16 +72,7 @@ for nodeName in nodeList:
     # Assign to the node hosting the FPGA.
     host.component_id = nodeName
     host.disk_image = params.osImage
-    
-    # Optional Blockstore
-    if params.tempFileSystemSize > 0 or params.tempFileSystemMax:
-        bs = host.Blockstore(nodeName + "-bs", params.tempFileSystemMount)
-        if params.tempFileSystemMax:
-            bs.size = "0GB"
-        else:
-            bs.size = str(params.tempFileSystemSize) + "GB"
-        bs.placement = "any"
-      
+          
     host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " >> /local/logs/output_log.txt"))
 
     # Since we want to create network links to the FPGA, it has its own identity.
