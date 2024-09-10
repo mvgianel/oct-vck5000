@@ -59,6 +59,10 @@ params = pc.bindParameters()
   
 pc.verifyParameters()
 
+lan = request.LAN()
+
+nodeList = params.nodes.split(',')
+
 # Process nodes, adding to FPGA network
 i = 0
 for nodeName in nodeList:
