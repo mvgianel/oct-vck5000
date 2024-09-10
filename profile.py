@@ -42,6 +42,11 @@ pc.defineParameter("workflow", "Workflow",
                    workflow[0], workflow,
                    longDescription="For Vitis application acceleration workflow, select Vitis. For traditional workflow, select Vivado.")   
 
+pc.defineParameter("toolVersion", "Tool Version",
+                   portal.ParameterType.STRING,
+                   toolVersion[0], toolVersion,
+                   longDescription="Select a tool version. It is recommended to use the latest version for the deployment workflow. For more information, visit https://www.xilinx.com/products/boards-and-kits/alveo/u280.html#gettingStarted")   
+
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
                    imageList[0], imageList,
