@@ -89,7 +89,7 @@ install_vck5000_shell() {
 
 flash_card() {
     echo "Flash Card(s). "
-    #/opt/xilinx/xrt/bin/xbmgmt program --base --device $PCI_ADDR
+    /opt/xilinx/xrt/bin/xbmgmt program --base --device $PCI_ADDR
 }
 
 detect_cards() {
