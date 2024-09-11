@@ -131,7 +131,7 @@ disable_pcie_fatal_error() {
 }
 
 XRT_BASE_PATH="/proj/octfpga-PG0/tools/deployment/xrt"
-SHELL_BASE_PATH="/proj/octfpga-PG0/tools/deployment/shell"
+SHELL_BASE_PATH="/proj/octfpga-PG0/tools/deployment/vck5000"
 XBFLASH_BASE_PATH="/proj/octfpga-PG0/tools/xbflash"
 VITIS_BASE_PATH="/proj/octfpga-PG0/tools/Xilinx/Vitis"
 CONFIG_FPGA_PATH="/proj/octfpga-PG0/tools/post-boot"
@@ -156,7 +156,6 @@ FACTORY_SHELL="xilinx_u280_GOLDEN_8"
 NODE_ID=$(hostname | cut -d'.' -f1)
 #PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
 
-echo "User name: , $USER!"
 detect_cards
 check_xrt
 if [ $? == 0 ]; then
