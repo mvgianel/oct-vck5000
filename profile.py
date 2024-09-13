@@ -26,7 +26,7 @@ imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', '
              ('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04')] 
 
 #dockerImageList = [('pytorch'), ('tensorflow'), ('tensorflow2')]
-workflow = ['Vitis', 'Vivado']
+workflow = ['Vitis']
 toolVersion = ['2023.1'] 
 
 pc.defineParameter("nodes","List of nodes",
