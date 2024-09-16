@@ -1,4 +1,4 @@
-"""OCT VCK5000 profile with post-boot script. DO NOT USE
+"""OCT VCK5000 profile with post-boot script.
 """
 
 # Import the Portal object.
