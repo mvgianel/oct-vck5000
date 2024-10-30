@@ -51,7 +51,7 @@ pc.defineParameter("osImage", "Select Image",
 pc.defineParameter("dockerImage", "Docker Image",
                    portal.ParameterType.STRING,
                    dockerImageList[0], dockerImageList,
-                   longDescription="Supported docker images.")  
+                   longDescription="Supported docker images (only applicable for Vitis-AI flow).")  
 
 # Retrieve the values the user specifies during instantiation.
 params = pc.bindParameters()        
@@ -73,9 +73,11 @@ for nodeName in nodeList:
     # Assign to the node hosting the FPGA.
     host.component_id = nodeName
     host.disk_image = params.osImage
-          
-    host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " " + params.dockerImage + " >> /local/logs/output_log.txt"))
 
+    if params.workflow == 'Vitis':
+        host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.toolVersion + "  >> /local/logs/output_log.txt"))
+    elif parame.workflow == 'Vitis-AI':  
+        node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.dockerImage + " >> /local/repository/output_log.txt"))
     # Since we want to create network links to the FPGA, it has its own identity.
     #fpga = request.RawPC("fpga-" + nodeName)
     # UMass cluster
