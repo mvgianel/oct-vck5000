@@ -25,8 +25,8 @@ request = pc.makeRequestRSpec()
 imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', 'UBUNTU 20.04'),
              ('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04')] 
 
-#dockerImageList = [('pytorch'), ('tensorflow'), ('tensorflow2')]
-workflow = ['Vitis']
+dockerImageList = [('pytorch')]
+workflow = ['Vitis', 'Vitis-AI']
 toolVersion = ['2023.1'] 
 
 pc.defineParameter("nodes","List of nodes",
@@ -48,10 +48,10 @@ pc.defineParameter("osImage", "Select Image",
                    imageList[0], imageList,
                    longDescription="Supported operating systems are Ubuntu and CentOS.")    
 
-#pc.defineParameter("dockerImage", "Docker Image",
-#                   portal.ParameterType.STRING,
-#                   dockerImageList[0], dockerImageList,
-#                   longDescription="Supported docker images.")  
+pc.defineParameter("dockerImage", "Docker Image",
+                   portal.ParameterType.STRING,
+                   dockerImageList[0], dockerImageList,
+                   longDescription="Supported docker images.")  
 
 # Retrieve the values the user specifies during instantiation.
 params = pc.bindParameters()        
@@ -74,7 +74,7 @@ for nodeName in nodeList:
     host.component_id = nodeName
     host.disk_image = params.osImage
           
-    host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " >> /local/logs/output_log.txt"))
+    host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " " + params.dockerImage + " >> /local/logs/output_log.txt"))
 
     # Since we want to create network links to the FPGA, it has its own identity.
     #fpga = request.RawPC("fpga-" + nodeName)
