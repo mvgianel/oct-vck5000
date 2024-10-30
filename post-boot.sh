@@ -179,33 +179,28 @@ disable_pcie_fatal_error
 
 install_config_fpga
 
-if [ "$WORKFLOW" = "Vitis" ] ; then
+
+check_shellpkg
+if [ $? == 0 ]; then
+    echo "Shell is already installed."
+    if check_requested_shell ; then
+        echo "FPGA shell verified."
+    else
+        echo "Error: FPGA shell couldn't be verified."
+        exit 1
+    fi
+else
+    echo "Shell is not installed. Installing shell..."
+    install_shellpkg
     check_shellpkg
     if [ $? == 0 ]; then
-        echo "Shell is already installed."
-        if check_requested_shell ; then
-            echo "FPGA shell verified."
-        else
-            echo "Error: FPGA shell couldn't be verified."
-            exit 1
-        fi
+        echo "Shell was successfully installed. Flashing..."
+        #flash_card
+        #/usr/local/bin/post-boot-fpga
+        #echo "Cold rebooting..."
+        #sudo -u geniuser perl /local/repository/cold-reboot.pl
     else
-        echo "Shell is not installed. Installing shell..."
-        install_shellpkg
-        check_shellpkg
-        if [ $? == 0 ]; then
-            echo "Shell was successfully installed. Flashing..."
-            #flash_card
-            #/usr/local/bin/post-boot-fpga
-            #echo "Cold rebooting..."
-            #sudo -u geniuser perl /local/repository/cold-reboot.pl
-        else
-            echo "Error: Shell installation failed."
-            exit 1
-        fi
+        echo "Error: Shell installation failed."
+        exit 1
     fi
-    
-else
-    echo "Custom flow selected."
-    install_xbflash
-fi    
+fi
