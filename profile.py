@@ -77,7 +77,7 @@ for nodeName in nodeList:
     if params.workflow == 'Vitis':
         host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.toolVersion + "  >> /local/logs/output_log.txt"))
     elif parame.workflow == 'Vitis-AI':  
-        node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.dockerImage + " >> /local/repository/output_log.txt"))
+        node.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot-vitis-ai.sh " + params.dockerImage + " >> /local/repository/output_log.txt"))
     # Since we want to create network links to the FPGA, it has its own identity.
     #fpga = request.RawPC("fpga-" + nodeName)
     # UMass cluster
