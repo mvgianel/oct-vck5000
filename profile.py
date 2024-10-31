@@ -69,6 +69,8 @@ i = 0
 for nodeName in nodeList:
     host = request.RawPC(nodeName)
     # UMass cluster
+    bs = host.Blockstore("bs", "/docker")
+    bs.size = "80GB"
     host.component_manager_id = "urn:publicid:IDN+cloudlab.umass.edu+authority+cm"
     # Assign to the node hosting the FPGA.
     host.component_id = nodeName
