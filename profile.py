@@ -36,7 +36,7 @@ pc.defineParameter("nodes","List of nodes",
 pc.defineParameter("workflow", "Workflow",
                    portal.ParameterType.STRING,
                    workflow[0], workflow,
-                   longDescription="User either Vitis or Vitis-AI.")   
+                   longDescription="Use either Vitis or Vitis-AI.")   
 
 pc.defineParameter("toolVersion", "Tool Version",
                    portal.ParameterType.STRING,
