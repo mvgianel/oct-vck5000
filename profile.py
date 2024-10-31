@@ -41,7 +41,7 @@ pc.defineParameter("workflow", "Workflow",
 pc.defineParameter("toolVersion", "Tool Version",
                    portal.ParameterType.STRING,
                    toolVersion[0], toolVersion,
-                   longDescription="Select a tool version (only applicable for Vitis-AI flow).")   
+                   longDescription="Select a tool version (only applicable for Vitis flow).")   
 
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
