@@ -45,16 +45,6 @@ check_xrt() {
     fi
 }
 
-install_xbflash() {
-    cp -r $XBFLASH_BASE_PATH/${OSVERSION} /tmp
-    echo "Installing xbflash."
-    if [[ "$OSVERSION" == "ubuntu-18.04" ]] || [[ "$OSVERSION" == "ubuntu-20.04" ]]; then
-        apt install /tmp/${OSVERSION}/*.deb
-    elif [[ "$OSVERSION" == "centos-7" ]] || [[ "$OSVERSION" == "centos-8" ]]; then
-        yum install /tmp/${OSVERSION}/*.rpm
-    fi    
-}
-
 check_requested_shell() {
     SHELL_INSTALL_INFO=`/opt/xilinx/xrt/bin/xbmgmt examine | grep "$DSA"`
 }
@@ -112,22 +102,9 @@ detect_cards() {
     fi
 }
 
-install_config_fpga() {
-    echo "Installing config-fpga."
-    cp $CONFIG_FPGA_PATH/* /usr/local/bin
-}
-
 install_libs() {
     echo "Installing libs."
     sudo $VITIS_BASE_PATH/$VITISVERSION/scripts/installLibs.sh
-}
-
-disable_pcie_fatal_error() {
-
-    echo "Disabling PCIe fatal error reporting for node: $NODE_ID"
-
-    # Check which group the node id belongs to and run the corresponding command
-    sudo /proj/octfpga-PG0/tools/pcie_disable_fatal.sh $PCI_ADDR
 }
 
 XRT_BASE_PATH="/proj/octfpga-PG0/tools/deployment/xrt"
@@ -141,8 +118,7 @@ OSVERSION=`echo $OSVERSION | tr -d '"'`
 VERSION_ID=`grep '^VERSION_ID=' /etc/os-release | awk -F= '{print $2}'`
 VERSION_ID=`echo $VERSION_ID | tr -d '"'`
 OSVERSION="$OSVERSION-$VERSION_ID"
-WORKFLOW=$1
-TOOLVERSION=$2
+TOOLVERSION=$1
 VITISVERSION="2023.1"
 SCRIPT_PATH=/local/repository
 COMB="${TOOLVERSION}_${OSVERSION}"
@@ -152,7 +128,7 @@ DSA=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{p
 PACKAGE_NAME=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $5}' | awk -F= '{print $2}'`
 PACKAGE_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $6}' | awk -F= '{print $2}'`
 XRT_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $7}' | awk -F= '{print $2}'`
-FACTORY_SHELL="xilinx_u280_GOLDEN_8"
+FACTORY_SHELL="xilinx_vck5000"
 NODE_ID=$(hostname | cut -d'.' -f1)
 #PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
 
@@ -174,38 +150,28 @@ else
 fi
 
 install_libs
-# Disable PCIe fatal error reporting
-disable_pcie_fatal_error 
 
-install_config_fpga
-
-if [ "$WORKFLOW" = "Vitis" ] ; then
+check_shellpkg
+if [ $? == 0 ]; then
+    echo "Shell is already installed."
+    if check_requested_shell ; then
+        echo "FPGA shell verified."
+    else
+        echo "Error: FPGA shell couldn't be verified."
+        exit 1
+    fi
+else
+    echo "Shell is not installed. Installing shell..."
+    install_shellpkg
     check_shellpkg
     if [ $? == 0 ]; then
-        echo "Shell is already installed."
-        if check_requested_shell ; then
-            echo "FPGA shell verified."
-        else
-            echo "Error: FPGA shell couldn't be verified."
-            exit 1
-        fi
+        echo "Shell was successfully installed. Flashing..."
+        #flash_card
+        #/usr/local/bin/post-boot-fpga
+        #echo "Cold rebooting..."
+        #sudo -u geniuser perl /local/repository/cold-reboot.pl
     else
-        echo "Shell is not installed. Installing shell..."
-        install_shellpkg
-        check_shellpkg
-        if [ $? == 0 ]; then
-            echo "Shell was successfully installed. Flashing..."
-            #flash_card
-            #/usr/local/bin/post-boot-fpga
-            #echo "Cold rebooting..."
-            #sudo -u geniuser perl /local/repository/cold-reboot.pl
-        else
-            echo "Error: Shell installation failed."
-            exit 1
-        fi
+        echo "Error: Shell installation failed."
+        exit 1
     fi
-    
-else
-    echo "Custom flow selected."
-    install_xbflash
-fi    
+fi
