@@ -41,7 +41,7 @@ pc.defineParameter("workflow", "Workflow",
 pc.defineParameter("toolVersion", "Tool Version",
                    portal.ParameterType.STRING,
                    toolVersion[0], toolVersion,
-                   longDescription="Select a tool version. It is recommended to use the latest version for the deployment workflow. For more information, visit https://www.xilinx.com/products/boards-and-kits/alveo/u280.html#gettingStarted")   
+                   longDescription="Select a tool version (only applicable for Vitis-AI flow).")   
 
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
