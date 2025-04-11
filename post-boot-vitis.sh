@@ -119,7 +119,7 @@ VERSION_ID=`grep '^VERSION_ID=' /etc/os-release | awk -F= '{print $2}'`
 VERSION_ID=`echo $VERSION_ID | tr -d '"'`
 OSVERSION="$OSVERSION-$VERSION_ID"
 TOOLVERSION=$1
-VITISVERSION="2023.1"
+VITISVERSION="2022.1"
 SCRIPT_PATH=/local/repository
 COMB="${TOOLVERSION}_${OSVERSION}"
 XRT_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $1}' | awk -F= '{print $2}'`
@@ -131,6 +131,31 @@ XRT_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -
 FACTORY_SHELL="xilinx_vck5000"
 NODE_ID=$(hostname | cut -d'.' -f1)
 #PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
+
+# === Install Python 3.8 ===
+echo "[INFO] Installing Python 3.8..."
+sudo apt update
+sudo apt install -y python3.8 python3.8-venv python3.8-dev
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+
+# === Install GCC 7.3.1 ===
+echo "[INFO] Installing GCC 7.3.1..."
+sudo apt install -y gcc-7 g++-7
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
+
+
+# === Install OpenCV 3.0.0 (static) ===
+echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
+OPENCV_VERSION="3.0.0"
+cd /tmp
+wget -q https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip
+unzip -q $OPENCV_VERSION.zip
+cd opencv-$OPENCV_VERSION
+mkdir build && cd build
+cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..
+make -j$(nproc)
+sudo make install
 
 detect_cards
 check_xrt
