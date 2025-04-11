@@ -145,17 +145,47 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
 
 
-# === Install OpenCV 3.0.0 (static) ===
+# === Install OpenCV 3.0.0 (Static Build) ===
 echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
-OPENCV_VERSION="3.0.0"
+
+# Required dependencies
+sudo apt install -y \
+  cmake unzip pkg-config \
+  libjpeg-dev libpng-dev libtiff-dev \
+  libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+  libxvidcore-dev libx264-dev libgtk2.0-dev \
+  libatlas-base-dev gfortran \
+  python3.8-dev
+
+# Download and extract
 cd /tmp
+OPENCV_VERSION="3.0.0"
 wget -q https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip
 unzip -q $OPENCV_VERSION.zip
 cd opencv-$OPENCV_VERSION
 mkdir build && cd build
-cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..
+
+# Configure static build
+cmake -DBUILD_SHARED_LIBS=OFF \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr/local \
+      -DBUILD_opencv_python2=OFF \
+      -DBUILD_opencv_python3=ON \
+      -DPYTHON3_EXECUTABLE=$(which python3) \
+      -DPYTHON3_INCLUDE_DIR=$(python3 -c "from sysconfig import get_paths as gp; print(gp()['include'])") \
+      -DPYTHON3_LIBRARY=$(python3 -c "from sysconfig import get_config_var as gcv; print(gcv('LIBDIR'))") \
+      -DWITH_IPP=OFF \
+      -DWITH_TBB=OFF ..
+
+# Build and install
 make -j$(nproc)
 sudo make install
+sudo ldconfig
+
+# Clean up
+cd ~
+rm -rf /tmp/opencv-$OPENCV_VERSION /tmp/$OPENCV_VERSION.zip
+
 
 detect_cards
 check_xrt
