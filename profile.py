@@ -92,6 +92,8 @@ for nodeName in nodeList:
     # Secret sauce.
     #fpga.SubNodeOf(host)
 
+    host.addService(pg.Execute(shell="bash", command="python3 -m pip install opencv-python==3.4.18.65"))
+
     host_iface1 = host.addInterface()
     host_iface1.component_id = "eth2"
     host_iface1.addAddress(pg.IPv4Address("192.168.40." + str(i+30), "255.255.255.0")) 
