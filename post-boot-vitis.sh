@@ -107,31 +107,7 @@ install_libs() {
     sudo $VITIS_BASE_PATH/$VITISVERSION/scripts/installLibs.sh
 }
 
-XRT_BASE_PATH="/proj/octfpga-PG0/tools/deployment/xrt"
-SHELL_BASE_PATH="/proj/octfpga-PG0/tools/deployment/vck5000"
-XBFLASH_BASE_PATH="/proj/octfpga-PG0/tools/xbflash"
-VITIS_BASE_PATH="/proj/octfpga-PG0/tools/Xilinx/Vitis"
-CONFIG_FPGA_PATH="/proj/octfpga-PG0/tools/post-boot"
-
-OSVERSION=`grep '^ID=' /etc/os-release | awk -F= '{print $2}'`
-OSVERSION=`echo $OSVERSION | tr -d '"'`
-VERSION_ID=`grep '^VERSION_ID=' /etc/os-release | awk -F= '{print $2}'`
-VERSION_ID=`echo $VERSION_ID | tr -d '"'`
-OSVERSION="$OSVERSION-$VERSION_ID"
-TOOLVERSION=$1
-VITISVERSION="2022.1"
-SCRIPT_PATH=/local/repository
-COMB="${TOOLVERSION}_${OSVERSION}"
-XRT_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $1}' | awk -F= '{print $2}'`
-SHELL_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $2}' | awk -F= '{print $2}'`
-DSA=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $3}' | awk -F= '{print $2}'`
-PACKAGE_NAME=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $5}' | awk -F= '{print $2}'`
-PACKAGE_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $6}' | awk -F= '{print $2}'`
-XRT_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $7}' | awk -F= '{print $2}'`
-FACTORY_SHELL="xilinx_vck5000"
-NODE_ID=$(hostname | cut -d'.' -f1)
-#PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
-
+install_extra() {
 # === Install Python 3.8 ===
 echo "[INFO] Installing Python 3.8..."
 sudo apt update
@@ -186,8 +162,35 @@ sudo ldconfig
 cd ~
 rm -rf /tmp/opencv-$OPENCV_VERSION /tmp/$OPENCV_VERSION.zip
 
+}
+
+XRT_BASE_PATH="/proj/octfpga-PG0/tools/deployment/xrt"
+SHELL_BASE_PATH="/proj/octfpga-PG0/tools/deployment/vck5000"
+XBFLASH_BASE_PATH="/proj/octfpga-PG0/tools/xbflash"
+VITIS_BASE_PATH="/proj/octfpga-PG0/tools/Xilinx/Vitis"
+CONFIG_FPGA_PATH="/proj/octfpga-PG0/tools/post-boot"
+
+OSVERSION=`grep '^ID=' /etc/os-release | awk -F= '{print $2}'`
+OSVERSION=`echo $OSVERSION | tr -d '"'`
+VERSION_ID=`grep '^VERSION_ID=' /etc/os-release | awk -F= '{print $2}'`
+VERSION_ID=`echo $VERSION_ID | tr -d '"'`
+OSVERSION="$OSVERSION-$VERSION_ID"
+TOOLVERSION=$1
+VITISVERSION="2022.1"
+SCRIPT_PATH=/local/repository
+COMB="${TOOLVERSION}_${OSVERSION}"
+XRT_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $1}' | awk -F= '{print $2}'`
+SHELL_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $2}' | awk -F= '{print $2}'`
+DSA=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $3}' | awk -F= '{print $2}'`
+PACKAGE_NAME=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $5}' | awk -F= '{print $2}'`
+PACKAGE_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $6}' | awk -F= '{print $2}'`
+XRT_VERSION=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $7}' | awk -F= '{print $2}'`
+FACTORY_SHELL="xilinx_vck5000"
+NODE_ID=$(hostname | cut -d'.' -f1)
+#PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
 
 detect_cards
+install_extra
 check_xrt
 if [ $? == 0 ]; then
     echo "XRT is already installed."
