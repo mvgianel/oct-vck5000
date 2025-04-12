@@ -78,6 +78,8 @@ for nodeName in nodeList:
 
     if params.workflow == 'Vitis':
         host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot-vitis.sh " + params.toolVersion + "  >> /local/logs/output_log.txt"))
+        host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh >> /local/logs/output_log.txt"))
+        host.addService(pg.Execute(shell="bash", command="python3 -m pip install opencv-python==3.4.18.65"))
     elif params.workflow == 'Vitis-AI':  
         host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot-vitis-ai.sh " + params.dockerImage + " >> /local/logs/output_log.txt"))
     # Since we want to create network links to the FPGA, it has its own identity.
@@ -91,10 +93,7 @@ for nodeName in nodeList:
 
     # Secret sauce.
     #fpga.SubNodeOf(host)
-
-    host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh >> /local/logs/output_log.txt"))
-    host.addService(pg.Execute(shell="bash", command="python3 -m pip install opencv-python==3.4.18.65"))
-
+  
     host_iface1 = host.addInterface()
     host_iface1.component_id = "eth2"
     host_iface1.addAddress(pg.IPv4Address("192.168.40." + str(i+30), "255.255.255.0")) 
