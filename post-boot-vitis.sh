@@ -125,42 +125,37 @@ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
 echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
 
 # Required dependencies
+sudo apt update && sudo apt upgrade -y
 sudo apt install -y \
-  cmake unzip pkg-config \
-  libjpeg-dev libpng-dev libtiff-dev \
-  libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
-  libxvidcore-dev libx264-dev libgtk2.0-dev \
-  libatlas-base-dev gfortran \
-  python3.8-dev
+    build-essential cmake git pkg-config \
+    libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev \
+    libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev \
+    python3-dev python3-numpy \
+    wget unzip
 
 # Download and extract
-cd /tmp
-OPENCV_VERSION="3.0.0"
-wget -q https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip
-unzip -q $OPENCV_VERSION.zip
-cd opencv-$OPENCV_VERSION
-mkdir build && cd build
+wget https://github.com/opencv/opencv/archive/3.0.0.zip -O opencv-3.0.0.zip
+unzip opencv-3.0.0.zip
+cd opencv-3.0.0
 
 # Configure static build
-cmake -DBUILD_SHARED_LIBS=OFF \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_INSTALL_PREFIX=/usr/local \
-      -DBUILD_opencv_python2=OFF \
-      -DBUILD_opencv_python3=ON \
-      -DPYTHON3_EXECUTABLE=$(which python3) \
-      -DPYTHON3_INCLUDE_DIR=$(python3 -c "from sysconfig import get_paths as gp; print(gp()['include'])") \
-      -DPYTHON3_LIBRARY=$(python3 -c "from sysconfig import get_config_var as gcv; print(gcv('LIBDIR'))") \
-      -DWITH_IPP=OFF \
-      -DWITH_TBB=OFF ..
+mkdir build && cd build
+cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D INSTALL_PYTHON_EXAMPLES=OFF \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_opencv_python3=ON \
+    -D PYTHON3_EXECUTABLE=$(which python3) \
+    -D PYTHON3_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+    -D PYTHON3_LIBRARY=$(python3 -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))") \
+    -D PYTHON3_NUMPY_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())") \
+    ..
 
-# Build and install
 make -j$(nproc)
 sudo make install
 sudo ldconfig
-
-# Clean up
-cd ~
-rm -rf /tmp/opencv-$OPENCV_VERSION /tmp/$OPENCV_VERSION.zip
 
 }
 
@@ -190,6 +185,14 @@ NODE_ID=$(hostname | cut -d'.' -f1)
 #PCI_ADDR=$(lspci -d 10ee: | awk '{print $1}' | head -n 1)
 
 detect_cards
+
+sudo apt update
+echo "Installing remote desktop software"
+sudo apt install -y ubuntu-gnome-desktop
+echo "Installed gnome desktop"
+sudo systemctl set-default multi-user.target
+sudo apt install -y tigervnc-standalone-server
+
 install_extra
 check_xrt
 if [ $? == 0 ]; then
