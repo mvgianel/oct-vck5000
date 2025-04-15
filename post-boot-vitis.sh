@@ -137,6 +137,8 @@ wget http://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz \
 && ln -s /opt/gcc-7.3.1/bin/g++ /usr/local/bin/g++-7.3 \
 && cd / && rm -rf /tmp/gcc-7.3.0*
 
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-7.3 1
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++-7.3 1
 
 # === Install OpenCV 3.0.0 (Static Build) ===
 echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
