@@ -111,14 +111,31 @@ install_extra() {
 # === Install Python 3.8 ===
 echo "[INFO] Installing Python 3.8..."
 sudo apt update
-sudo apt install -y python3.8 python3.8-venv python3.8-dev
+sudo apt install -y python3.8 python3.8-venv python3.8-dev \
+  libjpeg-dev \
+  libpng-dev \
+  libtiff-dev \
+  libjasper-dev
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
 
 # === Install GCC 7.3.1 ===
 echo "[INFO] Installing GCC 7.3.1..."
-sudo apt install -y gcc-7 g++-7
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
+#sudo apt install -y gcc-7 g++-7
+#sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100
+#sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
+wget http://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz \
+&& tar -xzf gcc-7.3.0.tar.gz \
+&& cd gcc-7.3.0 && ./contrib/download_prerequisites \
+&& mkdir build && cd build \
+&& ../configure \
+    --disable-multilib \
+    --disable-libsanitizer \
+    --enable-languages=c,c++ \
+    --prefix=/opt/gcc-7.3.1 \
+&& make -j$(nproc) && make install \
+&& ln -s /opt/gcc-7.3.1/bin/gcc /usr/local/bin/gcc-7.3 \
+&& ln -s /opt/gcc-7.3.1/bin/g++ /usr/local/bin/g++-7.3 \
+&& cd / && rm -rf /tmp/gcc-7.3.0*
 
 
 # === Install OpenCV 3.0.0 (Static Build) ===
@@ -141,17 +158,23 @@ cd opencv-3.0.0
 # Configure static build
 mkdir build && cd build
 cmake \
-    -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_C_EXAMPLES=OFF \
-    -D INSTALL_PYTHON_EXAMPLES=OFF \
-    -D BUILD_EXAMPLES=OFF \
-    -D BUILD_opencv_python3=ON \
-    -D PYTHON3_EXECUTABLE=$(which python3) \
-    -D PYTHON3_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
-    -D PYTHON3_LIBRARY=$(python3 -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))") \
-    -D PYTHON3_NUMPY_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())") \
-    ..
+  -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D BUILD_SHARED_LIBS=OFF \
+  -D WITH_FFMPEG=OFF \
+  -D WITH_V4L=OFF \
+  -D WITH_LIBV4L=OFF \
+  -D WITH_1394=OFF \
+  -D WITH_GTK=OFF \
+  -D WITH_VIDEOIO=OFF \
+  -D WITH_JPEG=ON \
+  -D WITH_PNG=ON \
+  -D WITH_TIFF=ON \
+  -D WITH_JASPER=ON \
+  -D BUILD_EXAMPLES=OFF \
+  -D BUILD_TESTS=OFF \
+  -D BUILD_PERF_TESTS=OFF \
+  ..
 
 make -j$(nproc)
 sudo make install
