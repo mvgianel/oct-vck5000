@@ -143,44 +143,90 @@ sudo update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++-7.3 1
 # === Install OpenCV 3.0.0 (Static Build) ===
 echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
 
-# Required dependencies
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y \
-    build-essential cmake git pkg-config \
-    libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev \
-    libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev \
-    python3-dev python3-numpy \
-    wget unzip
+#Specify OpenCV version
+cvVersion="3.4.4"
 
-# Download and extract
-wget https://github.com/opencv/opencv/archive/3.0.0.zip -O opencv-3.0.0.zip
-unzip opencv-3.0.0.zip
-cd opencv-3.0.0
+# Clean build directories
+rm -rf opencv/build
+rm -rf opencv_contrib/build
 
-# Configure static build
-mkdir build && cd build
-cmake \
-  -D CMAKE_BUILD_TYPE=RELEASE \
-  -D CMAKE_INSTALL_PREFIX=/usr/local \
-  -D BUILD_SHARED_LIBS=OFF \
-  -D WITH_FFMPEG=OFF \
-  -D WITH_V4L=OFF \
-  -D WITH_LIBV4L=OFF \
-  -D WITH_1394=OFF \
-  -D WITH_GTK=OFF \
-  -D WITH_VIDEOIO=OFF \
-  -D WITH_JPEG=ON \
-  -D WITH_PNG=ON \
-  -D WITH_TIFF=ON \
-  -D WITH_JASPER=ON \
-  -D BUILD_EXAMPLES=OFF \
-  -D BUILD_TESTS=OFF \
-  -D BUILD_PERF_TESTS=OFF \
-  ..
+# Create directory for installation
+mkdir installation
+mkdir installation/OpenCV-"$cvVersion"
 
-make -j$(nproc)
-sudo make install
-sudo ldconfig
+# Save current working directory
+cwd=$(pwd)
+sudo apt -y update
+sudo apt -y upgrade
+
+sudo apt -y remove x264 libx264-dev
+ 
+## Install dependencies
+sudo apt -y install build-essential checkinstall cmake pkg-config yasm
+sudo apt -y install git gfortran
+sudo apt -y install libjpeg8-dev libpng-dev
+ 
+sudo apt -y install software-properties-common
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt -y update
+ 
+sudo apt -y install libjasper1
+sudo apt -y install libtiff-dev
+ 
+sudo apt -y install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
+sudo apt -y install libxine2-dev libv4l-dev
+cd /usr/include/linux
+sudo ln -s -f ../libv4l1-videodev.h videodev.h
+cd "$cwd"
+ 
+sudo apt -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
+sudo apt -y install libatlas-base-dev
+sudo apt -y install libfaac-dev libmp3lame-dev libtheora-dev
+sudo apt -y install libvorbis-dev libxvidcore-dev
+sudo apt -y install libopencore-amrnb-dev libopencore-amrwb-dev
+sudo apt -y install libavresample-dev
+sudo apt -y install x264 v4l-utils
+ 
+# Optional dependencies
+sudo apt -y install libprotobuf-dev protobuf-compiler
+sudo apt -y install libgoogle-glog-dev libgflags-dev
+sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+
+sudo apt -y install python3-dev python3-pip python3-vev
+sudo -H pip3 install -U pip numpy
+sudo apt -y install python3-testresources
+
+# now install python libraries within this virtual environment
+pip install wheel numpy scipy matplotlib scikit-image scikit-learn ipython dlib
+
+git clone https://github.com/opencv/opencv.git
+cd opencv
+git checkout 3.4
+cd ..
+ 
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv_contrib
+git checkout 3.4
+cd ..
+
+cd opencv
+mkdir build
+cd build
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+            -D CMAKE_INSTALL_PREFIX=$cwd/installation/OpenCV-"$cvVersion" \
+            -D INSTALL_C_EXAMPLES=ON \
+            -D INSTALL_PYTHON_EXAMPLES=ON \
+            -D WITH_TBB=ON \
+            -D WITH_V4L=ON \
+            -D OPENCV_PYTHON3_INSTALL_PATH=$cwd/OpenCV-$cvVersion-py3/lib/python3.5/site-packages \
+        -D WITH_QT=ON \
+        -D WITH_OPENGL=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+        -D BUILD_EXAMPLES=ON ..
+make -j4
+make install
 
 }
 
