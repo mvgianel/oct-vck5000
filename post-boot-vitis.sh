@@ -123,22 +123,22 @@ echo "[INFO] Installing GCC 7.3.1..."
 #sudo apt install -y gcc-7 g++-7
 #sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100
 #sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
-wget http://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz \
-&& tar -xzf gcc-7.3.0.tar.gz \
-&& cd gcc-7.3.0 && ./contrib/download_prerequisites \
-&& mkdir build && cd build \
-&& ../configure \
-    --disable-multilib \
-    --disable-libsanitizer \
-    --enable-languages=c,c++ \
-    --prefix=/opt/gcc-7.3.1 \
-&& make -j$(nproc) && make install \
-&& ln -s /opt/gcc-7.3.1/bin/gcc /usr/local/bin/gcc-7.3 \
-&& ln -s /opt/gcc-7.3.1/bin/g++ /usr/local/bin/g++-7.3 \
-&& cd / && rm -rf /tmp/gcc-7.3.0*
+# wget http://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz \
+# && tar -xzf gcc-7.3.0.tar.gz \
+# && cd gcc-7.3.0 && ./contrib/download_prerequisites \
+# && mkdir build && cd build \
+# && ../configure \
+#     --disable-multilib \
+#     --disable-libsanitizer \
+#     --enable-languages=c,c++ \
+#     --prefix=/opt/gcc-7.3.1 \
+# && make -j$(nproc) && make install \
+# && ln -s /opt/gcc-7.3.1/bin/gcc /usr/local/bin/gcc-7.3 \
+# && ln -s /opt/gcc-7.3.1/bin/g++ /usr/local/bin/g++-7.3 \
+# && cd / && rm -rf /tmp/gcc-7.3.0*
 
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-7.3 1
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++-7.3 1
+# sudo update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-7.3 1
+# sudo update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++-7.3 1
 
 # === Install OpenCV 3.0.0 (Static Build) ===
 # echo "[INFO] Installing OpenCV 3.0.0 (static build)..."
