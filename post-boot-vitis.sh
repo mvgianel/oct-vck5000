@@ -242,7 +242,7 @@ VERSION_ID=`grep '^VERSION_ID=' /etc/os-release | awk -F= '{print $2}'`
 VERSION_ID=`echo $VERSION_ID | tr -d '"'`
 OSVERSION="$OSVERSION-$VERSION_ID"
 TOOLVERSION=$1
-VITISVERSION="2022.1"
+VITISVERSION="2023.1"
 SCRIPT_PATH=/local/repository
 COMB="${TOOLVERSION}_${OSVERSION}"
 XRT_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $1}' | awk -F= '{print $2}'`
